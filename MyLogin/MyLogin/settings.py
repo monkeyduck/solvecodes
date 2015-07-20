@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_DIRS = (
-    'D:/schoolbag/C++/MyLogin/templates',
+   os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
 # Quick-start development settings - unsuitable for production
