@@ -1,2 +1,2 @@
-# sovlecodes
+# solvecodes
 for leetcoders
