@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate,login as auth_login,logout as auth_
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 # Create your views here.
+
+
 def register(request):
     error=[]
     if request.method == 'POST':
@@ -17,7 +19,11 @@ def register(request):
             password2= data['password2']
             if not User.objects.all().filter(username=username):
                 if form.pwd_validate(password, password2):
-                    user = User.objects.create_user(username, email, password)
+                    try:
+                        user = User.objects.create_user(username=username, email=email, password=password)
+                    except Exception, ex:
+                        print ex
+                    user.is_active = True
                     user.save()
                     login_validate(request,username,password)
                     return render_to_response('welcome.html',{'user':username})
@@ -38,8 +44,12 @@ def login_validate(request,username,password):
             auth_login(request,user)
             return True
     return rtvalue
+
+
 def homepage(request):
     return HttpResponse("Welcome to Homepage!")
+
+
 def mylogin(request):
     error = []
     if request.method == 'POST':
@@ -57,9 +67,12 @@ def mylogin(request):
     else:
         form = LoginForm()
     return render_to_response('login.html',{'error':error,'form':form})
+
+
 def mylogout(request):
     auth_logout(request)
     return HttpResponseRedirect('/login/')
+
 
 def changepassword(request,username):
     error = []
@@ -83,5 +96,3 @@ def changepassword(request,username):
     else:
         form = ChangepwdForm()
     return render_to_response('changepassword.html',{'form':form,'error':error})
-            
-    
